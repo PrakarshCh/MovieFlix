@@ -14,6 +14,7 @@ class DetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detail Screen"),
+        centerTitle: true,
       ),
       body: Center(child: Text(movie)),
     );
