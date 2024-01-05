@@ -1,7 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ttn_flix/Constant/Constant.dart';
+import 'package:ttn_flix/Constant/String_Constant.dart';
+import 'package:ttn_flix/Helper/AppLoader.dart';
 import 'package:ttn_flix/route/app_router.dart';
 import '../../data/models/movieModel.dart';
 import '../../logic/bloc_cubit/movieCubit.dart';
@@ -20,9 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Movies"),
-        backgroundColor: Colors.blueGrey,
-        foregroundColor: Colors.white,
+        title: const Text(AppStrings.homeTitle),
       ),
       body: SafeArea(
         child: BlocConsumer<MovieCubit, MovieState>(
@@ -38,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, state) {
             if (state is LoadingState) {
               return const Center(
-                child: CircularProgressIndicator(color: Colors.blueGrey),
+                child: AppLoader(),
               );
             }
 
@@ -70,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 100.0,
                 width: 100.0,
                 child: Image.network(
-                  Constant.imageUrl + movieResult.posterPath.toString(),
+                  AppStrings.imageUrl + movieResult.posterPath.toString(),
                   fit: BoxFit.fitWidth,
                 ),
               ),

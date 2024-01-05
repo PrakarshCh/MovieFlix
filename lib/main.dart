@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ttn_flix/route/app_router.dart';
+import 'Theme/AppTheme.dart';
 import 'logic/bloc_cubit/movieCubit.dart';
 
 void main() async {
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
       create: (context) => MovieCubit(),
       child: MaterialApp.router(
         routerConfig: appRouter.config(),
+        title: 'Flutter Demo',
+        theme: ThemeManager.instance.light,
+        darkTheme: ThemeManager.instance.dark,
       ),
     );
   }
