@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ttn_flix/route/app_router.dart';
-import 'Theme/AppTheme.dart';
-import 'logic/bloc_cubit/movieCubit.dart';
+import 'package:ttn_flix/route/app_route.dart';
+import 'DI/injector.dart';
+import 'Theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  AppInjector().setup();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    AppRouter appRouter = AppRouter();
-    return BlocProvider(
-      create: (context) => MovieCubit(),
-      child: MaterialApp.router(
-        routerConfig: appRouter.config(),
-        title: 'Flutter Demo',
-        theme: ThemeManager.instance.light,
-        darkTheme: ThemeManager.instance.dark,
-      ),
+    final appRouter = AppRouter();
+    return MaterialApp.router(
+      title: 'Flutter Demo',
+      theme: ThemeManager.instance.light,
+      darkTheme: ThemeManager.instance.dark,
+      routerConfig: appRouter.config(),
     );
   }
 }
