@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     final appRouter = AppRouter();
     return MaterialApp.router(
       title: 'Flutter Demo',
-      theme: ThemeManager.instance.light,
+      theme: ThemeManager.instance.dark,
       darkTheme: ThemeManager.instance.dark,
       routerConfig: appRouter.config(),
     );

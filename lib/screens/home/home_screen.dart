@@ -1,14 +1,15 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ttn_flix/Screens/home/widgets/home_carousel_view.dart';
-import 'package:ttn_flix/Screens/home/widgets/home_movie_list_view.dart';
+
 import '../../Helper/bottom_loader.dart';
+import '../../Screens/home/bloc/state/home_state.dart';
+import '../../Screens/home/widgets/home_carousel_view.dart';
+import '../../Screens/home/widgets/home_movie_list_view.dart';
 import '../../constants/app_constant.dart';
 import '../../constants/app_string_constant.dart';
 import 'bloc/event/home_event.dart';
 import 'bloc/home_bloc.dart';
-import 'bloc/state/home_state.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
