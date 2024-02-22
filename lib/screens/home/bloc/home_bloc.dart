@@ -27,6 +27,11 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
         model = await repository?.getHomeData(1);
         var db = AppInjector.getIt<DBManager>();
         favIds = await db.getAllIds();
+        model?.results?.forEach((element) {
+          if (favIds.contains(element.id)) {
+            element.isFavSelected = true;
+          }
+        });
         emit(AllWishListState(favIds));
       }
       if (model != null) {
@@ -40,6 +45,11 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {
           emit(HomeLoadMoreState(false));
           var db = AppInjector.getIt<DBManager>();
           favIds = await db.getAllIds();
+          model.results?.forEach((element) {
+            if (favIds.contains(element.id)) {
+              element.isFavSelected = true;
+            }
+          });
           emit(AllWishListState(favIds));
         }
       } else {

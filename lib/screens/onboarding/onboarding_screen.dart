@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'package:ttn_flix/route/app_route.gr.dart';
+import '../../DI/injector.dart';
 import '../../constants/app_shared_prefrence.dart';
 import '../../helper/app_button.dart';
 import '../../constants/app_constant.dart';
 
 @RoutePage()
 class Onboarding extends StatelessWidget {
-  const Onboarding({super.key});
+  var sharedInstance = AppInjector.getIt<AppSharedPref>();
+  Onboarding({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +33,8 @@ class Onboarding extends StatelessWidget {
             child: AppButton(
               title: AppStrings.getStarted,
               onPressed: () {
+                sharedInstance.setBool(
+                    key: AppSharedPrefEnums.onBoardingShown, value: true);
                 context.router.push(LoginRoute());
               },
               foreground: AppColors.white,

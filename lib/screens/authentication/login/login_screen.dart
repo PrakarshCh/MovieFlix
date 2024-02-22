@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/constants/app_shared_prefrence.dart';
 import 'package:ttn_flix/route/app_route.gr.dart';
 import '../../../helper/app_button.dart';
 import '../../../constants/app_constant.dart';
@@ -17,6 +19,7 @@ class Login extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   final LoginCubit _loginCubit = LoginCubit();
+  var sharedInstance = AppInjector.getIt<AppSharedPref>();
 
   void formValidation() async {
     if (_formKey.currentState?.validate() == true) {
@@ -34,6 +37,9 @@ class Login extends StatelessWidget {
         SnackBar snackBar = SnackBar(content: Text(state.message ?? ''));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else if (state is LoginSuccessState) {
+        sharedInstance.setInt(
+            key: AppSharedPrefEnums.timeStamp,
+            value: DateTime.now().millisecondsSinceEpoch);
         context.router.push(const AppBottomBarRoute());
       }
     }, builder: (context, state) {

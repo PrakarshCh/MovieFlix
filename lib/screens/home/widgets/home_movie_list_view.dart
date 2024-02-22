@@ -40,6 +40,7 @@ class HomeMovieList extends StatelessWidget {
                 movie,
                 isFavourite: wishListItems!.contains(movie.id),
                 title: title,
+                isClicked: () {},
               ),
             );
           },

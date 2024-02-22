@@ -7,7 +7,10 @@ enum AppSharedPrefEnums {
   fullName,
   dob,
   gender,
-  profileImage
+  profileImage,
+  lastActive,
+  onBoardingShown,
+  timeStamp
 }
 
 class AppSharedPref {
@@ -34,6 +37,14 @@ class AppSharedPref {
 
   bool getBool({required AppSharedPrefEnums key}) {
     return pref?.getBool(key.name) ?? false;
+  }
+
+  setInt({required AppSharedPrefEnums key, required int value}) {
+    pref?.setInt(key.name, value);
+  }
+
+  int getInt({required AppSharedPrefEnums key}) {
+    return pref?.getInt(key.name) ?? 0;
   }
 
   void remove(AppSharedPrefEnums key) {

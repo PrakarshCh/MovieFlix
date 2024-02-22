@@ -31,7 +31,7 @@ class WishListButtonWidget extends StatelessWidget {
       return InkWell(
           onTap: () {
             final cubit = context.read<WishListCubit>();
-            cubit.addRemoveWishlist(movie, !isWishlist);
+            cubit.addRemoveWishlist(context, movie);
           },
           child: Container(
               width: 30,

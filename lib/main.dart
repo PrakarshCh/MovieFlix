@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ttn_flix/Theme/AppTheme.dart';
+import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'package:ttn_flix/route/app_route.dart';
 import 'DI/injector.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final appRouter = AppRouter();
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: AppStrings.appTitle,
       theme: ThemeManager.instance.dark,
       darkTheme: ThemeManager.instance.dark,
       routerConfig: appRouter.config(),

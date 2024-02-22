@@ -31,6 +31,8 @@ class MovieData {
   double? voteAverage;
   @JsonKey(name: "original_language")
   String? language;
+  @JsonKey(includeFromJson: false)
+  bool isFavSelected = false;
 
   MovieData(
       {this.imageUrl,
@@ -42,7 +44,8 @@ class MovieData {
       this.releaseDate,
       this.voteAverage,
       this.voteCount,
-      this.language});
+      this.language,
+      this.isFavSelected = false});
 
   factory MovieData.fromJson(Map<String, dynamic> json) =>
       _$MovieDataFromJson(json);
@@ -58,6 +61,7 @@ class MovieData {
     voteAverage = (map['voteAverage'] as num?)?.toDouble();
     voteCount = map['voteCount'] as int;
     language = map['language'] as String;
+    isFavSelected = true;
   }
 
   Map<String, Object?> toMap(MovieData movie) => <String, Object?>{
@@ -70,6 +74,7 @@ class MovieData {
         'releaseDate': movie.releaseDate,
         'voteCount': movie.voteCount,
         'voteAverage': movie.voteAverage,
-        'language': movie.language
+        'language': movie.language,
+        'isFavSelected': movie.isFavSelected
       };
 }

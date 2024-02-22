@@ -25,11 +25,15 @@ class $AssetsImagesGen {
   AssetGenImage get placeholder =>
       const AssetGenImage('assets/images/placeholder.png');
 
+  /// File path: assets/images/splash.png
+  AssetGenImage get splash => const AssetGenImage('assets/images/splash.png');
+
   /// File path: assets/images/woman.png
   AssetGenImage get woman => const AssetGenImage('assets/images/woman.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [male, movie, others, placeholder, woman];
+  List<AssetGenImage> get values =>
+      [male, movie, others, placeholder, splash, woman];
 }
 
 class Assets {

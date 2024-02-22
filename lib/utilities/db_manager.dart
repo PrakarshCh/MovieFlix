@@ -13,7 +13,8 @@ enum WishlistTableColumns {
   releaseDate,
   voteCount,
   voteAverage,
-  language
+  language,
+  isFavSelected,
 }
 
 class DBManager {
@@ -45,7 +46,8 @@ class DBManager {
             ${WishlistTableColumns.language.name} TEXT NULL,
             ${WishlistTableColumns.adult.name} INTEGER NULL,
             ${WishlistTableColumns.voteAverage.name} REAL NULL,
-            ${WishlistTableColumns.voteCount.name} INTEGER NULL
+            ${WishlistTableColumns.voteCount.name} INTEGER NULL,
+            ${WishlistTableColumns.isFavSelected.name} INTEGER NULL
           )
           ''');
   }

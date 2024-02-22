@@ -43,4 +43,8 @@ class AppStrings {
   static const String favouritesDeleted =
       'Movie successfully delete in Favourites';
   static const String favouritesErrorMessage = 'Unable to update movie data';
+  static const String editProfile = "Edit Profile";
+  static const String update = "Update";
+  static const String edit = "Edit";
+  static const String appTitle = "Movie World App";
 }

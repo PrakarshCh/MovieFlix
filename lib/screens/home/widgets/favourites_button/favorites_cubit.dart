@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ttn_flix/constants/app_string_constant.dart';
 import '../../../../DI/injector.dart';
 import '../../../../data/models/movie_model.dart';
 import '../../../../utilities/db_manager.dart';
@@ -8,21 +8,23 @@ import 'favorites_state.dart';
 class WishListCubit extends Cubit<WishListState> {
   WishListCubit() : super(WishListInitState());
 
-  void addRemoveWishlist(MovieData movie, bool isNeedToAdd) async {
+  void addRemoveWishlist(BuildContext context, MovieData movie) async {
     var db = AppInjector.getIt<DBManager>();
-    if (isNeedToAdd) {
+    if (!movie.isFavSelected) {
       var result = await db.insert(movie);
       if (result > 0) {
-        emit(WishListSuccess(AppStrings.favouritesAdded, true));
+        if (context.mounted) emit(WishListSuccess("successfullyAdded", true));
       } else {
-        emit(WishListError(AppStrings.favouritesErrorMessage));
+        if (context.mounted) emit(WishListError("dbError"));
       }
     } else {
       var result = await db.delete(movie.id ?? 0);
       if (result > 0) {
-        emit(WishListSuccess(AppStrings.favouritesDeleted, false));
+        if (context.mounted) {
+          emit(WishListSuccess("successfullyRemoved", false));
+        }
       } else {
-        emit(WishListError(AppStrings.favouritesErrorMessage));
+        if (context.mounted) emit(WishListError("dbError"));
       }
     }
   }

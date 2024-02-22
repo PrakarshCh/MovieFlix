@@ -7,6 +7,7 @@ import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'package:ttn_flix/route/app_route.gr.dart';
 import '../../DI/injector.dart';
 import '../../constants/app_shared_prefrence.dart';
+import '../../gen/assets.gen.dart';
 import '../../helper/app_alert.dart';
 import '../../utilities/file_manager.dart';
 import 'account_widget/accountInfo_widget.dart';
@@ -14,16 +15,19 @@ import 'account_widget/account_profile_widget.dart';
 import 'account_widget/accountcard_widget.dart';
 
 @RoutePage()
-class Account extends StatefulWidget {
-  const Account({super.key});
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({super.key});
+
   @override
-  State<Account> createState() => _AccountState();
+  State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _AccountState extends State<Account> {
+class _AccountScreenState extends State<AccountScreen> {
   String? name, email, dob, gender;
+  File? imageFile;
   var sharedInstance = AppInjector.getIt<AppSharedPref>();
-  File? _pickedImage;
+  FileManager fileManager = AppInjector.getIt<FileManager>();
+
   @override
   void initState() {
     getProfileData();
@@ -31,14 +35,12 @@ class _AccountState extends State<Account> {
   }
 
   getProfileData() async {
-    name = await sharedInstance.getString(key: AppSharedPrefEnums.fullName);
-    email = await sharedInstance.getString(key: AppSharedPrefEnums.email);
-    dob = await sharedInstance.getString(key: AppSharedPrefEnums.dob);
-    gender = await sharedInstance.getString(key: AppSharedPrefEnums.gender);
-    FileManager fileManager = AppInjector.getIt<FileManager>();
-    _pickedImage = await fileManager.getFile(
+    name = sharedInstance.getString(key: AppSharedPrefEnums.fullName);
+    email = sharedInstance.getString(key: AppSharedPrefEnums.email);
+    dob = sharedInstance.getString(key: AppSharedPrefEnums.dob);
+    gender = sharedInstance.getString(key: AppSharedPrefEnums.gender);
+    imageFile = await fileManager.getFile(
         sharedInstance.getString(key: AppSharedPrefEnums.profileImage));
-
     setState(() {});
   }
 
@@ -50,7 +52,7 @@ class _AccountState extends State<Account> {
         confirmTap: () {
           sharedInstance.remove(AppSharedPrefEnums.loginStatus);
           context.router.push(
-            const OnboardingRoute(),
+            OnboardingRoute(),
           );
         }).showDialogBox(context);
   }
@@ -60,9 +62,9 @@ class _AccountState extends State<Account> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(AppStrings.account),
-          backgroundColor: AppColors.primaryColor,
-          centerTitle: true,
           automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: AppColors.primaryColor,
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
@@ -73,11 +75,11 @@ class _AccountState extends State<Account> {
             ),
             IconButton(
               icon: const Icon(Icons.edit),
-              tooltip: 'edit',
+              tooltip: AppStrings.edit,
               onPressed: () {
-                context.router.push(
-                  EditAccountRoute(),
-                );
+                context.router.push(EditAccountRoute(
+                  isUpdated: () => {getProfileData()},
+                ));
               },
             ),
           ],
@@ -91,16 +93,31 @@ class _AccountState extends State<Account> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ProfileImageWidget(gender ?? '',
-                          pickedImage: _pickedImage),
-                      const SizedBox(height: AppSpacing.small),
+                      SizedBox(
+                        height: AppIconSize.loaderSize,
+                        width: AppIconSize.loaderSize,
+                        child: CircleAvatar(
+                          child: imageFile != null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      AppBorderRadius.extraLarge),
+                                  child: Image.file(imageFile!,
+                                      fit: BoxFit.cover,
+                                      height: AppIconSize.loaderSize,
+                                      width: AppIconSize.loaderSize))
+                              : ClipOval(
+                                  child: gender == AppStrings.other
+                                      ? Assets.images.others.image()
+                                      : gender == AppStrings.male
+                                          ? Assets.images.male.image()
+                                          : Assets.images.woman.image()),
+                        ),
+                      ),
                       Center(
                           child: Text(name ?? '',
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: AppFontSize.large))),
-                      // const SizedBox(height: AppSpacing.regular),
-                      // const Text('Personal Information'),
+                                fontWeight: FontWeight.bold,
+                              ))),
                       ProfileCardWidget(
                           child: Column(children: [
                         Info(AppStrings.emailAddress, email ?? ''),
@@ -109,7 +126,6 @@ class _AccountState extends State<Account> {
                         const Divider(),
                         Info(AppStrings.gender, gender ?? ''),
                       ])),
-                      const SizedBox(height: AppSpacing.small),
                     ]))));
   }
 }

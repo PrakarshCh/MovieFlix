@@ -26,7 +26,7 @@ class _AppBottomBarState extends State<AppBottomBar> {
         child: HomePage()),
     BlocProvider(
         create: (context) => FavouriteCubit(), child: FavouritesPage()),
-    Account(),
+    const AccountScreen(),
   ];
 
   void _onItemTapped(int index) {

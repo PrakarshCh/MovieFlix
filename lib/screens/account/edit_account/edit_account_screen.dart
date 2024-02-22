@@ -24,8 +24,10 @@ class EditAccount extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final EditAccountCubit _accountCubit = EditAccountCubit();
   final ValueNotifier<String> _gender = ValueNotifier<String>("");
+  final Function isUpdated;
   File? _pickedImage;
-  EditAccount({super.key}) {
+
+  EditAccount({super.key, required this.isUpdated}) {
     AppSharedPref sharedInstance = AppInjector.getIt<AppSharedPref>();
     FileManager fileManager = AppInjector.getIt<FileManager>();
     fileManager
@@ -62,7 +64,10 @@ class EditAccount extends StatelessWidget {
     return BlocProvider<EditAccountCubit>(
         create: (context) => _accountCubit,
         child: Scaffold(
-            appBar: AppBar(title: const Text('Edit account')),
+            appBar: AppBar(
+              title: const Text(AppStrings.editProfile),
+              backgroundColor: AppColors.primaryColor,
+            ),
             body: SafeArea(
                 child: SingleChildScrollView(
                     child: Padding(
@@ -75,82 +80,99 @@ class EditAccount extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  ValueListenableBuilder(
-                                      valueListenable: _gender,
-                                      builder: (context, value, _) {
-                                        return ProfileImage(
-                                          pickerImage: (image) {
-                                            _pickedImage = image;
-                                          },
-                                          gender: _gender.value,
-                                          pickedImage: _pickedImage,
-                                        );
-                                      }),
-                                  const SizedBox(height: AppSpacing.regular),
-                                  AppTextField(
-                                      label: AppStrings.name,
-                                      controller: _nameEditingController,
-                                      validator: (value) {
-                                        if (value != null) {
-                                          if (Validator.isValidName(context,
-                                                  name: value) !=
-                                              null) {
-                                            return Validator.isValidName(
-                                                context,
-                                                name: value);
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: AppPaddings.small),
+                                    child: ValueListenableBuilder(
+                                        valueListenable: _gender,
+                                        builder: (context, value, _) {
+                                          return ProfileImage(
+                                            pickerImage: (image) {
+                                              _pickedImage = image;
+                                            },
+                                            gender: _gender.value,
+                                            pickedImage: _pickedImage,
+                                          );
+                                        }),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: AppPaddings.small),
+                                    child: AppTextField(
+                                        label: AppStrings.name,
+                                        controller: _nameEditingController,
+                                        validator: (value) {
+                                          if (value != null) {
+                                            if (Validator.isValidName(context,
+                                                    name: value) !=
+                                                null) {
+                                              return Validator.isValidName(
+                                                  context,
+                                                  name: value);
+                                            }
                                           }
-                                        }
-                                        return null;
-                                      },
-                                      inputType: TextInputType.name),
-                                  const SizedBox(height: AppSpacing.regular),
-                                  AppTextField(
-                                      label: AppStrings.dob,
-                                      readOnly: true,
-                                      onTap: () {
-                                        DatePicker(context, date: (date) {
-                                          _dobEditingController.text = date;
-                                        }).show();
-                                      },
-                                      controller: _dobEditingController,
-                                      validator: (value) {
-                                        if (value != null) {
-                                          if (Validator.isEmpty(value)) {
-                                            return AppStrings.dobMessage;
+                                          return null;
+                                        },
+                                        inputType: TextInputType.name),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: AppPaddings.small),
+                                    child: AppTextField(
+                                        label: AppStrings.dob,
+                                        readOnly: true,
+                                        onTap: () {
+                                          DatePicker(context, date: (date) {
+                                            _dobEditingController.text = date;
+                                          }).show();
+                                        },
+                                        controller: _dobEditingController,
+                                        validator: (value) {
+                                          if (value != null) {
+                                            if (Validator.isEmpty(value)) {
+                                              return AppStrings.dobMessage;
+                                            }
                                           }
-                                        }
-                                        return null;
-                                      },
-                                      inputType: TextInputType.emailAddress),
-                                  const SizedBox(height: AppSpacing.regular),
-                                  AppRadioButton(
-                                      label: AppStrings.gender,
-                                      items: const [
-                                        AppStrings.male,
-                                        AppStrings.female,
-                                        AppStrings.other
-                                      ],
-                                      selectedItem: _gender.value,
-                                      onChange: (value) {
-                                        _gender.value = value;
-                                      }),
-                                  const SizedBox(height: AppSpacing.regular),
-                                  BlocConsumer<EditAccountCubit,
-                                          EditAccountState>(
-                                      listener: (context, state) {
-                                    if (state is SuccessState) {
-                                      context.router.pop(context);
-                                    }
-                                  }, builder: (context, state) {
-                                    return AppButton(
-                                      title: 'update',
-                                      onPressed: () {
-                                        _validateForm();
-                                      },
-                                      foreground: AppColors.white,
-                                      background: AppColors.buttonColor,
-                                    );
-                                  })
+                                          return null;
+                                        },
+                                        inputType: TextInputType.emailAddress),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: AppPaddings.small),
+                                    child: AppRadioButton(
+                                        label: AppStrings.gender,
+                                        items: const [
+                                          AppStrings.male,
+                                          AppStrings.female,
+                                          AppStrings.other
+                                        ],
+                                        selectedItem: _gender.value,
+                                        onChange: (value) {
+                                          _gender.value = value;
+                                        }),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: AppPaddings.small),
+                                    child: BlocConsumer<EditAccountCubit,
+                                            EditAccountState>(
+                                        listener: (context, state) {
+                                      if (state is SuccessState) {
+                                        context.router.pop();
+                                        isUpdated.call();
+                                      }
+                                    }, builder: (context, state) {
+                                      return AppButton(
+                                        title: AppStrings.update,
+                                        onPressed: () {
+                                          _validateForm();
+                                        },
+                                        foreground: AppColors.white,
+                                        background: AppColors.buttonColor,
+                                      );
+                                    }),
+                                  )
                                 ])))))));
   }
 }
