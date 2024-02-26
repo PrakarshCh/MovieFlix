@@ -1,17 +1,16 @@
 import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/Helper/app_alert.dart';
 import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/constants/app_shared_prefrence.dart';
 import 'package:ttn_flix/constants/app_string_constant.dart';
+import 'package:ttn_flix/gen/assets.gen.dart';
 import 'package:ttn_flix/route/app_route.gr.dart';
-import '../../DI/injector.dart';
-import '../../constants/app_shared_prefrence.dart';
-import '../../gen/assets.gen.dart';
-import '../../helper/app_alert.dart';
-import '../../utilities/file_manager.dart';
+import 'package:ttn_flix/utilities/file_manager.dart';
 import 'account_widget/accountInfo_widget.dart';
-import 'account_widget/account_profile_widget.dart';
 import 'account_widget/accountcard_widget.dart';
 
 @RoutePage()
@@ -49,10 +48,11 @@ class _AccountScreenState extends State<AccountScreen> {
         title: AppStrings.logout,
         message: AppStrings.logoutMessage,
         confirmBtnText: AppStrings.logout,
-        confirmTap: () {
+        confirmTap: () async {
+          await FirebaseAuth.instance.signOut();
           sharedInstance.remove(AppSharedPrefEnums.loginStatus);
           context.router.push(
-            OnboardingRoute(),
+            LoginRoute(),
           );
         }).showDialogBox(context);
   }

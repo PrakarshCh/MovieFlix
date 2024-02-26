@@ -1,20 +1,18 @@
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ttn_flix/Extension/loader.dart';
+import 'package:ttn_flix/Helper/App_radio_button.dart';
+import 'package:ttn_flix/Helper/app_text_field.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
 import 'package:ttn_flix/helper/app_button.dart';
 import 'package:ttn_flix/constants/app_string_constant.dart';
+import 'package:ttn_flix/screens/authentication/bloc/Cubit/signup_cubit.dart';
+import 'package:ttn_flix/screens/authentication/bloc/state/signup_state.dart';
 import 'package:ttn_flix/screens/authentication/signup/profile_image.dart';
-import '../../../constants/app_constant.dart';
-import '../../../helper/app_text_field.dart';
-import '../../../helper/App_radio_button.dart';
-import '../../../route/app_route.gr.dart';
-import '../../../utilities/app_validator.dart';
-import '../../../utilities/date_picker.dart';
-import '../bloc/Cubit/signup_cubit.dart';
-import '../bloc/state/signup_state.dart';
+import 'package:ttn_flix/utilities/app_validator.dart';
+import 'package:ttn_flix/utilities/date_picker.dart';
 
 @RoutePage()
 class SignupPage extends StatelessWidget {
@@ -33,17 +31,10 @@ class SignupPage extends StatelessWidget {
 
   void formValidation() async {
     if (formKey.currentState?.validate() == true) {
-      Map<String, dynamic> params = {
-        LoginApiKeys.email: emailController.text,
-        LoginApiKeys.password: passwordController.text,
-        LoginApiKeys.name: nameController.text,
-        LoginApiKeys.dob: dobController.text,
-        LoginApiKeys.gender: gender.value
-      };
-      if (_pickedImage != null) {
-        params[LoginApiKeys.image] = _pickedImage;
-      }
-      signupCubit.signup(params);
+      signupCubit.registerUsingEmailPassword(
+          name: nameController.text,
+          email: emailController.text,
+          password: passwordController.text);
     }
   }
 
@@ -63,7 +54,6 @@ class SignupPage extends StatelessWidget {
                 key: formKey,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ValueListenableBuilder(
                           valueListenable: gender,
@@ -74,7 +64,7 @@ class SignupPage extends StatelessWidget {
                                 },
                                 gender: gender.value);
                           }),
-                      SizedBox(height: AppSpacing.regular),
+                      const SizedBox(height: AppSpacing.regular),
                       AppTextField(
                           label: AppStrings.name,
                           controller: nameController,
@@ -175,11 +165,26 @@ class SignupPage extends StatelessWidget {
                       BlocConsumer<SignupCubit, SignupState>(
                           listener: (context, state) {
                         if (state is SignupError) {
+                          Navigator.pop(context);
                           SnackBar snackBar =
                               SnackBar(content: Text(state.message ?? ''));
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         } else if (state is SignupSuccessState) {
-                          context.router.push(const AppBottomBarRoute());
+                          Map<String, dynamic> params = {
+                            LoginApiKeys.email: emailController.text,
+                            LoginApiKeys.password: passwordController.text,
+                            LoginApiKeys.name: nameController.text,
+                            LoginApiKeys.dob: dobController.text,
+                            LoginApiKeys.gender: gender.value
+                          };
+                          if (_pickedImage != null) {
+                            params[LoginApiKeys.image] = _pickedImage;
+                          }
+                          signupCubit.signup(params);
+                          Navigator.pop(context);
+                          context.router.pop();
+                        } else if (state is SignupLoadingState) {
+                          context.showLoader();
                         }
                       }, builder: (context, state) {
                         return AppButton(

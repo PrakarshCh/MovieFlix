@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../constants/app_constant.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
 
 class ProfileCardWidget extends StatelessWidget {
   final Widget child;

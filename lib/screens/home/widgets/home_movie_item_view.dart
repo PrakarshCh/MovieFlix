@@ -1,13 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ttn_flix/Screens/home/widgets/favourites_button/favorites_cubit.dart';
-import 'package:ttn_flix/Screens/home/widgets/favourites_button/favorites_state.dart';
+import 'package:ttn_flix/Helper/image_view.dart';
+import 'package:ttn_flix/Screens/home/widgets/favourites_button/wishList_cubit.dart';
+import 'package:ttn_flix/Screens/home/widgets/favourites_button/wishList_state.dart';
+import 'package:ttn_flix/constants/api_constant.dart';
 import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'package:ttn_flix/data/models/movie_model.dart';
 import 'package:ttn_flix/route/app_route.gr.dart';
-import '../../../Helper/image_view.dart';
-import '../../../constants/api_constant.dart';
 
 @RoutePage()
 class MovieItem extends StatelessWidget {
@@ -111,7 +112,9 @@ class MovieItem extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text((movie.adult ?? false) ? "Adult" : "UA"),
+                          Text((movie.adult ?? false)
+                              ? AppStrings.adult
+                              : AppStrings.UA),
                           Text(movie.language?.toUpperCase() ?? ''),
                         ],
                       ),

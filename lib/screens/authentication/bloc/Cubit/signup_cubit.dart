@@ -1,12 +1,13 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
+import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/constants/app_shared_prefrence.dart';
+import 'package:ttn_flix/screens/authentication/bloc/state/signup_state.dart';
 import 'package:ttn_flix/utilities/App_encryption.dart';
-import '../../../../DI/injector.dart';
-import '../../../../constants/app_constant.dart';
-import '../../../../constants/app_shared_prefrence.dart';
-import '../../../../utilities/file_manager.dart';
-import '../state/signup_state.dart';
+import 'package:ttn_flix/utilities/file_manager.dart';
 
 class SignupCubit extends Cubit<SignupState> {
   SignupCubit() : super(SignupInitialState());
@@ -33,6 +34,32 @@ class SignupCubit extends Cubit<SignupState> {
           key: AppSharedPrefEnums.profileImage, value: basename(path.path));
     }
     sharedInstance.setBool(key: AppSharedPrefEnums.loginStatus, value: true);
-    emit(SignupSuccessState());
+    //emit(SignupSuccessState());
+  }
+
+  Future<User?> registerUsingEmailPassword({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    emit(SignupLoadingState());
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+    try {
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      user = userCredential.user;
+      await user!.updateDisplayName(name);
+      await user.reload();
+      user = auth.currentUser;
+      emit(SignupSuccessState());
+    } on FirebaseAuthException catch (e) {
+      emit(SignupError(e.code));
+    } catch (e) {
+      emit(SignupError(e.toString()));
+    }
+    return user;
   }
 }

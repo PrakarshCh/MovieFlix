@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
 import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'dart:io';
-import '../../../constants/app_constant.dart';
-import '../../../utilities/app_image_picker.dart';
+import 'package:ttn_flix/utilities/app_image_picker.dart';
 
 class ProfileImage extends StatefulWidget {
   final ValueChanged<File>? pickerImage;

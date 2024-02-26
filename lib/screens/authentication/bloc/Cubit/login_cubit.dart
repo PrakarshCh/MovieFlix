@@ -1,10 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/constants/app_shared_prefrence.dart';
+import 'package:ttn_flix/screens/authentication/bloc/state/login_state.dart';
 import 'package:ttn_flix/utilities/App_encryption.dart';
-import '../../../../DI/injector.dart';
-import '../../../../constants/app_constant.dart';
-import '../../../../constants/app_shared_prefrence.dart';
-import '../../../../constants/app_string_constant.dart';
-import '../state/login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitialState());
@@ -12,12 +13,10 @@ class LoginCubit extends Cubit<LoginState> {
   void loginIn(Map params) async {
     var sharedInstance = AppInjector.getIt<AppSharedPref>();
     if (params[LoginApiKeys.email] ==
-            await sharedInstance.getString(key: AppSharedPrefEnums.email) &&
+            sharedInstance.getString(key: AppSharedPrefEnums.email) &&
         params[LoginApiKeys.password] ==
-            Encryption.decrypt(
-                AppData.encryptKey,
-                await sharedInstance.getString(
-                    key: AppSharedPrefEnums.password))) {
+            Encryption.decrypt(AppData.encryptKey,
+                sharedInstance.getString(key: AppSharedPrefEnums.password))) {
       sharedInstance.setString(
           key: AppSharedPrefEnums.email, value: params[LoginApiKeys.email]);
       sharedInstance.setString(
@@ -25,10 +24,34 @@ class LoginCubit extends Cubit<LoginState> {
           value: Encryption.encrypt(
                   AppData.encryptKey, params[LoginApiKeys.password])
               .base64);
+      sharedInstance.setInt(
+          key: AppSharedPrefEnums.timeStamp,
+          value: DateTime.now().millisecondsSinceEpoch);
       sharedInstance.setBool(key: AppSharedPrefEnums.loginStatus, value: true);
-      emit(LoginSuccessState());
+      //emit(LoginSuccessState());
     } else {
-      emit(LoginError(AppStrings.incorrectPassword));
+      //emit(LoginError(AppStrings.incorrectPassword));
     }
+  }
+
+  Future<User?> signInUsingEmailPassword({
+    required String email,
+    required String password,
+  }) async {
+    emit(LoginLoadingState());
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      user = userCredential.user;
+      emit(LoginSuccessState());
+    } on FirebaseAuthException catch (e) {
+      emit(LoginError(e.code));
+    }
+    return user;
   }
 }

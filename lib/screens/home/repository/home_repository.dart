@@ -1,7 +1,7 @@
 import 'package:ttn_flix/DI/injector.dart';
-import '../../../constants/app_constant.dart';
-import '../../../data/api/api_services.dart';
-import '../../../data/models/movie_model.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/data/api/api_services.dart';
+import 'package:ttn_flix/data/models/movie_model.dart';
 
 class HomeRepository {
   late APIServices _apiService;

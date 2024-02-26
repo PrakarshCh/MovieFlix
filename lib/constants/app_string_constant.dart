@@ -38,13 +38,14 @@ class AppStrings {
   static const String getStarted = 'Get Started';
   static const String logout = 'Logout';
   static const String logoutMessage = 'Are you sure to logout?';
-  static const String favouritesAdded =
-      'Movie successfully added in Favourites';
-  static const String favouritesDeleted =
-      'Movie successfully delete in Favourites';
-  static const String favouritesErrorMessage = 'Unable to update movie data';
+  static const String favouritesAdded = 'Successfully added in Favourites';
+  static const String favouritesDeleted = 'Successfully delete in Favourites';
+  static const String favouritesErrorMessage = 'Unable to update data';
   static const String editProfile = "Edit Profile";
   static const String update = "Update";
   static const String edit = "Edit";
   static const String appTitle = "Movie World App";
+  static const String noFavourites = "No favourites";
+  static const String UA = "UA";
+  static const String adult = "Adult";
 }

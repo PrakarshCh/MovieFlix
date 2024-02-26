@@ -2,13 +2,13 @@ import 'dart:ui';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ttn_flix/Screens/home/widgets/favourites_button/wishList_cubit.dart';
+import 'package:ttn_flix/Screens/home/widgets/favourites_button/wishList_state.dart';
+import 'package:ttn_flix/constants/api_constant.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'package:ttn_flix/data/models/movie_model.dart';
 import 'package:readmore/readmore.dart';
-import '../../Screens/home/widgets/favourites_button/favorites_cubit.dart';
-import '../../Screens/home/widgets/favourites_button/favorites_state.dart';
-import '../../constants/api_constant.dart';
-import '../../constants/app_constant.dart';
-import '../../constants/app_string_constant.dart';
 
 @RoutePage()
 class MovieDetailScreen extends StatelessWidget {
@@ -118,8 +118,8 @@ class MovieDetailScreen extends StatelessWidget {
                                       const Text('|'),
                                       Text(
                                           (movie.adult ?? false)
-                                              ? "Adult"
-                                              : "UA",
+                                              ? AppStrings.adult
+                                              : AppStrings.UA,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: AppIconSize.regular,

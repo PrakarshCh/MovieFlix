@@ -1,11 +1,10 @@
 import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:ttn_flix/DI/injector.dart';
 import 'package:ttn_flix/constants/app_shared_prefrence.dart';
 import 'package:ttn_flix/gen/assets.gen.dart';
-import '../../route/app_route.gr.dart';
+import 'package:ttn_flix/route/app_route.gr.dart';
 
 @RoutePage()
 class SplashScreen extends StatelessWidget {

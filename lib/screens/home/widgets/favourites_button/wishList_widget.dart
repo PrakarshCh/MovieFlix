@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../constants/app_constant.dart';
 import '../../../../data/models/movie_model.dart';
-import 'favorites_cubit.dart';
-import 'favorites_state.dart';
+import 'wishList_cubit.dart';
+import 'wishList_state.dart';
 
 class WishListButtonWidget extends StatelessWidget {
   final MovieData movie;
