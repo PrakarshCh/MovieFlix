@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ttn_flix/DI/injector.dart';
 import 'package:ttn_flix/Screens/home/bloc/state/home_state.dart';
+import 'package:ttn_flix/data/models/movie_model.dart';
+import 'package:ttn_flix/screens/home/repository/home_repository.dart';
 import 'package:ttn_flix/utilities/db_manager.dart';
-import '../../../data/models/movie_model.dart';
-import '../repository/home_repository.dart';
 import 'event/home_event.dart';
 
 class HomeBloc extends Bloc<HomeBlocEvent, HomeBlocState> {

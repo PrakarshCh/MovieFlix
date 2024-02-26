@@ -1,9 +1,9 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ttn_flix/Screens/home/widgets/favourites_button/favorites_cubit.dart';
-import '../../../constants/app_constant.dart';
-import '../../../data/models/movie_model.dart';
+import 'package:ttn_flix/Screens/home/widgets/favourites_button/wishList_cubit.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/data/models/movie_model.dart';
 import 'home_movie_item_view.dart';
 
 @RoutePage()

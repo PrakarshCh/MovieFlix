@@ -2,15 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/Extension/loader.dart';
+import 'package:ttn_flix/Helper/app_button.dart';
+import 'package:ttn_flix/Helper/app_text_field.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
 import 'package:ttn_flix/constants/app_shared_prefrence.dart';
+import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'package:ttn_flix/route/app_route.gr.dart';
-import '../../../helper/app_button.dart';
-import '../../../constants/app_constant.dart';
-import '../../../constants/app_string_constant.dart';
-import '../../../helper/app_text_field.dart';
-import '../../../utilities/app_validator.dart';
-import '../bloc/Cubit/login_cubit.dart';
-import '../bloc/state/login_state.dart';
+import 'package:ttn_flix/screens/authentication/bloc/Cubit/login_cubit.dart';
+import 'package:ttn_flix/screens/authentication/bloc/state/login_state.dart';
+import 'package:ttn_flix/utilities/app_validator.dart';
 
 @RoutePage()
 class Login extends StatelessWidget {
@@ -21,32 +22,37 @@ class Login extends StatelessWidget {
   final LoginCubit _loginCubit = LoginCubit();
   var sharedInstance = AppInjector.getIt<AppSharedPref>();
 
-  void formValidation() async {
+  void formValidation(BuildContext context) async {
     if (_formKey.currentState?.validate() == true) {
-      var params = {
-        LoginApiKeys.email: _emailController.text,
-        LoginApiKeys.password: _passwordController.text
-      };
-      _loginCubit.loginIn(params);
+      _loginCubit.signInUsingEmailPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
     }
   }
 
   Widget _loginButton() {
     return BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
       if (state is LoginError) {
+        Navigator.pop(context);
         SnackBar snackBar = SnackBar(content: Text(state.message ?? ''));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else if (state is LoginSuccessState) {
-        sharedInstance.setInt(
-            key: AppSharedPrefEnums.timeStamp,
-            value: DateTime.now().millisecondsSinceEpoch);
+        Navigator.pop(context);
+        var params = {
+          LoginApiKeys.email: _emailController.text,
+          LoginApiKeys.password: _passwordController.text
+        };
+        _loginCubit.loginIn(params);
         context.router.push(const AppBottomBarRoute());
+      } else if (state is LoginLoadingState) {
+        context.showLoader();
       }
     }, builder: (context, state) {
       return AppButton(
         title: AppStrings.login,
         onPressed: () {
-          formValidation();
+          formValidation(context);
         },
         foreground: AppColors.white,
         background: AppColors.buttonColor,
@@ -73,7 +79,7 @@ class Login extends StatelessWidget {
                     children: <Widget>[
                       const Image(
                         image: AssetImage(AppImages.movie),
-                        height: 150,
+                        height: AppIconSize.movieImage,
                       ),
                       const SizedBox(height: AppSpacing.regular),
                       const Text(AppStrings.login,

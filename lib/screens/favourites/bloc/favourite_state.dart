@@ -1,4 +1,4 @@
-import '../../../data/models/movie_model.dart';
+import 'package:ttn_flix/data/models/movie_model.dart';
 
 abstract class FavouriteState {
   const FavouriteState();

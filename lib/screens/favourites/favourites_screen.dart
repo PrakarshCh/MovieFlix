@@ -1,10 +1,10 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ttn_flix/Screens/home/widgets/home_movie_list_view.dart';
 import 'package:ttn_flix/constants/app_constant.dart';
-import '../../Screens/home/widgets/home_movie_list_view.dart';
-import '../../constants/app_string_constant.dart';
-import '../../data/models/movie_model.dart';
+import 'package:ttn_flix/constants/app_string_constant.dart';
+import 'package:ttn_flix/data/models/movie_model.dart';
 import 'bloc/favourite_cubit.dart';
 import 'bloc/favourite_state.dart';
 
@@ -30,10 +30,10 @@ class FavouritesPage extends StatelessWidget {
                         state.wishListItems.map((e) => (e.id ?? 0)).toList()));
           } else {
             return const Center(
-                child: Text('No favourites!!',
+                child: Text(AppStrings.noFavourites,
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: AppFontSize.extraLarge)));
+                        fontSize: AppFontSize.xlLarge)));
           }
         }));
   }

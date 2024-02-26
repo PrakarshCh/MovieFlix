@@ -1,14 +1,14 @@
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../constants/app_constant.dart';
-import '../../constants/app_string_constant.dart';
-import '../account/account_screen.dart';
-import '../favourites/bloc/favourite_cubit.dart';
-import '../favourites/favourites_screen.dart';
-import '../home/home_screen.dart';
-import '../home/bloc/home_bloc.dart';
-import '../home/repository/home_repository.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/constants/app_string_constant.dart';
+import 'package:ttn_flix/screens/account/account_screen.dart';
+import 'package:ttn_flix/screens/favourites/bloc/favourite_cubit.dart';
+import 'package:ttn_flix/screens/favourites/favourites_screen.dart';
+import 'package:ttn_flix/screens/home/bloc/home_bloc.dart';
+import 'package:ttn_flix/screens/home/home_screen.dart';
+import 'package:ttn_flix/screens/home/repository/home_repository.dart';
 
 @RoutePage()
 class AppBottomBar extends StatefulWidget {

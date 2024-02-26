@@ -9,6 +9,7 @@ class AppTextField extends StatefulWidget {
     this.isPassword = false,
     this.inputType = TextInputType.none,
     this.readOnly = false,
+    this.required = true,
     this.maxLines = 1,
     this.onTap,
     Key? key,
@@ -16,7 +17,9 @@ class AppTextField extends StatefulWidget {
 
   final String label;
   final TextEditingController? controller;
-  final bool isPassword, readOnly;
+  final bool isPassword;
+  final bool readOnly;
+  final bool required;
   final FormFieldValidator? validator;
   final TextInputType inputType;
   final int? maxLines;
@@ -49,7 +52,7 @@ class _AppTextFieldState extends State<AppTextField> {
       decoration: InputDecoration(
         labelStyle: const TextStyle(color: AppColors.white),
         isDense: true,
-        label: Text(widget.label),
+        label: Text("${widget.label} ${widget.required ? "*" : ""}"),
         border: const OutlineInputBorder(),
         suffixIcon: widget.isPassword
             ? IconButton(

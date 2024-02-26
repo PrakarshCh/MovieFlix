@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../DI/injector.dart';
-import '../../../utilities/db_manager.dart';
+import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/utilities/db_manager.dart';
 import 'favourite_state.dart';
 
 class FavouriteCubit extends Cubit<FavouriteState> {

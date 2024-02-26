@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../Helper/image_view.dart';
-import '../../../constants/api_constant.dart';
-import '../../../constants/app_constant.dart';
-import '../../../data/models/movie_model.dart';
+import 'package:ttn_flix/Helper/image_view.dart';
+import 'package:ttn_flix/constants/api_constant.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/data/models/movie_model.dart';
 
 class CarouselView extends StatefulWidget {
   final List<MovieData>? movieList;

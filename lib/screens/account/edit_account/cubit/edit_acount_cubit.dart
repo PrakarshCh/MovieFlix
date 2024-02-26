@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
+import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/constants/app_constant.dart';
+import 'package:ttn_flix/constants/app_shared_prefrence.dart';
 import 'package:ttn_flix/screens/account/edit_account/cubit/state/edit_acount_state.dart';
-
-import '../../../../DI/injector.dart';
-import '../../../../constants/app_constant.dart';
-import '../../../../constants/app_shared_prefrence.dart';
-import '../../../../utilities/file_manager.dart';
+import 'package:ttn_flix/utilities/file_manager.dart';
 
 class EditAccountCubit extends Cubit<EditAccountState> {
   EditAccountCubit() : super(InitialState());
