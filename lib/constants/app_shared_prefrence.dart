@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AppSharedPrefEnums {
@@ -10,7 +12,8 @@ enum AppSharedPrefEnums {
   profileImage,
   lastActive,
   onBoardingShown,
-  timeStamp
+  timeStamp,
+  favouriteList
 }
 
 class AppSharedPref {
@@ -53,5 +56,42 @@ class AppSharedPref {
 
   void clear() async {
     pref?.clear();
+  }
+
+  // Save and retrieve a list of JSON using a model
+  List<T> getList<T>(String key, T Function(Map<String, dynamic>) fromJson) {
+    final jsonStringList = pref?.getStringList(key);
+    if (jsonStringList != null) {
+      return jsonStringList.map((jsonString) {
+        final Map<String, dynamic> jsonMap = json.decode(jsonString);
+        return fromJson(jsonMap);
+      }).toList();
+    }
+    return [];
+  }
+
+  Future<bool> saveList(String key, List<dynamic> list) async {
+    final jsonStringList = list.map((item) => json.encode(item)).toList();
+    return await pref?.setStringList(key, jsonStringList) ?? false;
+  }
+
+  // Remove a list from SharedPreferences
+  Future<void> removeList(String key) async {
+    await pref?.remove(key);
+  }
+
+  static Future<bool> saveSingleString(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.setString(key, value);
+  }
+
+  static Future<String?> getSingleString(String? key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key!);
+  }
+
+  static Future<void> clearData() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 }

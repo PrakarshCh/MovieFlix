@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
 import 'package:ttn_flix/DI/injector.dart';
@@ -18,12 +20,13 @@ class EditAccountCubit extends Cubit<EditAccountState> {
         key: AppSharedPrefEnums.gender, value: request[LoginApiKeys.gender]);
     sharedInstance.setString(
         key: AppSharedPrefEnums.dob, value: request[LoginApiKeys.dob]);
-    if (request[LoginApiKeys.image] is File) {
-      FileManager fileManager = AppInjector.getIt<FileManager>();
-      var path = await fileManager.saveFile(request[LoginApiKeys.image]);
+
+    if (request[LoginApiKeys.image] is Uint8List) {
+      final encodedImage = base64Encode(request[LoginApiKeys.image]);
       sharedInstance.setString(
-          key: AppSharedPrefEnums.profileImage, value: basename(path.path));
+          key: AppSharedPrefEnums.profileImage, value: encodedImage);
     }
+
     emit(SuccessState());
   }
 }

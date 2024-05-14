@@ -1,13 +1,14 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:ttn_flix/constants/app_constant.dart';
 import 'package:ttn_flix/constants/app_string_constant.dart';
-import 'dart:io';
 import 'package:ttn_flix/utilities/app_image_picker.dart';
 
 class ProfileImage extends StatefulWidget {
-  final ValueChanged<File>? pickerImage;
+  final ValueChanged<Uint8List>? pickerImage;
   final String? gender;
-  File? pickedImage;
+  Uint8List? pickedImage;
+
   ProfileImage({this.pickerImage, this.pickedImage, this.gender, super.key});
 
   @override
@@ -32,7 +33,7 @@ class _ProfileImageState extends State<ProfileImage> {
                   ? ClipRRect(
                       borderRadius:
                           BorderRadius.circular(AppBorderRadius.extraLarge),
-                      child: Image.file(widget.pickedImage!,
+                      child: Image.memory(widget.pickedImage!,
                           fit: BoxFit.cover,
                           height: AppIconSize.loaderSize,
                           width: AppIconSize.loaderSize))

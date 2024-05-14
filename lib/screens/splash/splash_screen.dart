@@ -41,7 +41,6 @@ class SplashScreen extends StatelessWidget {
       var diff = now.difference(date);
       int time;
       time = diff.inMinutes;
-
       return time < _sessionOutTime ? true : false;
     } else {
       return false;

@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -48,6 +45,16 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAQCRsY7uRY3sO6bVTWUXHu5dN6pml9-Aw',
+    appId: '1:789013365092:web:571972246e12d997bd3a71',
+    messagingSenderId: '789013365092',
+    projectId: 'movieflix-4b23b',
+    authDomain: 'movieflix-4b23b.firebaseapp.com',
+    storageBucket: 'movieflix-4b23b.appspot.com',
+    measurementId: 'G-CYMEEJR3H8',
+  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyD1pn1R8e58TKplvidVtn8DRVDkWr7vgk8',

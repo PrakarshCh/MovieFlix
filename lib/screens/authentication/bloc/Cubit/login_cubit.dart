@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ttn_flix/DI/injector.dart';
 import 'package:ttn_flix/constants/app_constant.dart';

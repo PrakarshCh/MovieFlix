@@ -9,7 +9,7 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: LoginRoute.page),
         AutoRoute(page: SignupPageRoute.page),
         AutoRoute(page: AppBottomBarRoute.page),
-        AutoRoute(page: HomePageRoute.page),
+        AutoRoute(page: HomeScreenRoute.page, initial: false),
         AutoRoute(page: MovieDetailScreenRoute.page),
         AutoRoute(page: EditAccountRoute.page),
         AutoRoute(page: SplashScreenRoute.page, initial: true),

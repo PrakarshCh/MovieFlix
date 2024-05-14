@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppPaddings {
-  static const double four = 8;
+  static const double four = 4;
   static const double extraSmall = 8;
   static const double small = 12;
   static const double regular = 16;

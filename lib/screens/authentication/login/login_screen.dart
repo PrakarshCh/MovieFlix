@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/Extension/context_extention.dart';
 import 'package:ttn_flix/Extension/loader.dart';
 import 'package:ttn_flix/Helper/app_button.dart';
 import 'package:ttn_flix/Helper/app_text_field.dart';
@@ -18,11 +19,12 @@ class Login extends StatelessWidget {
   Login({super.key});
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey();
+  final GlobalKey<FormState> _formKey =
+      GlobalKey(); // A [FormState] object can be used to [save], [reset], and [validate] every FormField.
   final LoginCubit _loginCubit = LoginCubit();
   var sharedInstance = AppInjector.getIt<AppSharedPref>();
 
-  void formValidation(BuildContext context) async {
+  void formValidation() async {
     if (_formKey.currentState?.validate() == true) {
       _loginCubit.signInUsingEmailPassword(
         email: _emailController.text,
@@ -52,7 +54,7 @@ class Login extends StatelessWidget {
       return AppButton(
         title: AppStrings.login,
         onPressed: () {
-          formValidation(context);
+          formValidation();
         },
         foreground: AppColors.white,
         background: AppColors.buttonColor,
@@ -73,79 +75,86 @@ class Login extends StatelessWidget {
                   left: AppPaddings.regular, right: AppPaddings.regular),
               child: Form(
                 key: _formKey,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      const Image(
-                        image: AssetImage(AppImages.movie),
-                        height: AppIconSize.movieImage,
-                      ),
-                      const SizedBox(height: AppSpacing.regular),
-                      const Text(AppStrings.login,
-                          style: TextStyle(
-                              fontSize: AppFontSize.extraLarge,
-                              fontWeight: FontWeight.w600)),
-                      const SizedBox(height: AppSpacing.regular),
-                      const Text(AppStrings.signInMessage,
-                          style: TextStyle(
-                              fontSize: AppFontSize.regular,
-                              fontWeight: FontWeight.w400)),
-                      const SizedBox(height: AppSpacing.large),
-                      AppTextField(
-                        label: AppStrings.emailAddress,
-                        controller: _emailController,
-                        validator: (value) {
-                          if (value != null) {
-                            if (Validator.isEmailValid(context, email: value) !=
-                                null) {
-                              return Validator.isEmailValid(context,
-                                  email: value);
-                            }
-                          }
-                          return null;
-                        },
-                        inputType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: AppSpacing.regular),
-                      AppTextField(
-                          label: AppStrings.password,
-                          controller: _passwordController,
-                          isPassword: true,
-                          validator: (value) {
-                            if (value != null) {
-                              if (Validator.isValidPassword(context,
-                                      password: value) !=
-                                  null) {
-                                return Validator.isValidPassword(context,
-                                    password: value);
+                child: Center(
+                  child: SizedBox(
+                    width: context.isSmallScreen
+                        ? context.width
+                        : context.width / 2,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          const Image(
+                            image: AssetImage(AppImages.movie),
+                            height: AppIconSize.movieImage,
+                          ),
+                          const SizedBox(height: AppSpacing.regular),
+                          const Text(AppStrings.login,
+                              style: TextStyle(
+                                  fontSize: AppFontSize.extraLarge,
+                                  fontWeight: FontWeight.w600)),
+                          const SizedBox(height: AppSpacing.regular),
+                          const Text(AppStrings.signInMessage,
+                              style: TextStyle(
+                                  fontSize: AppFontSize.regular,
+                                  fontWeight: FontWeight.w400)),
+                          const SizedBox(height: AppSpacing.large),
+                          AppTextField(
+                            label: AppStrings.emailAddress,
+                            controller: _emailController,
+                            validator: (value) {
+                              if (value != null) {
+                                if (Validator.isEmailValid(context,
+                                        email: value) !=
+                                    null) {
+                                  return Validator.isEmailValid(context,
+                                      email: value);
+                                }
                               }
-                            }
-                            return null;
-                          },
-                          inputType: TextInputType.visiblePassword),
-                      const SizedBox(height: AppSpacing.regular),
-                      _loginButton(),
-                      const SizedBox(height: AppSpacing.regular),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(AppStrings.dontHaveAccount,
-                                style: TextStyle(
-                                    fontSize: AppFontSize.regular,
-                                    fontWeight: FontWeight.w400)),
-                            InkWell(
-                              onTap: () {
-                                context.router.push(SignupPageRoute());
+                              return null;
+                            },
+                            inputType: TextInputType.emailAddress,
+                          ),
+                          const SizedBox(height: AppSpacing.regular),
+                          AppTextField(
+                              label: AppStrings.password,
+                              controller: _passwordController,
+                              isPassword: true,
+                              validator: (value) {
+                                if (value != null) {
+                                  if (Validator.isValidPassword(context,
+                                          password: value) !=
+                                      null) {
+                                    return Validator.isValidPassword(context,
+                                        password: value);
+                                  }
+                                }
+                                return null;
                               },
-                              child: const Text(AppStrings.signUp,
-                                  style: TextStyle(
-                                      fontSize: AppFontSize.regular,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.primaryColor)),
-                            )
-                          ])
-                    ]),
+                              inputType: TextInputType.visiblePassword),
+                          const SizedBox(height: AppSpacing.regular),
+                          _loginButton(),
+                          const SizedBox(height: AppSpacing.regular),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(AppStrings.dontHaveAccount,
+                                    style: TextStyle(
+                                        fontSize: AppFontSize.regular,
+                                        fontWeight: FontWeight.w400)),
+                                InkWell(
+                                  onTap: () {
+                                    context.router.push(SignupPageRoute());
+                                  },
+                                  child: const Text(AppStrings.signUp,
+                                      style: TextStyle(
+                                          fontSize: AppFontSize.regular,
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColors.primaryColor)),
+                                )
+                              ])
+                        ]),
+                  ),
+                ),
               ),
             ),
           ),

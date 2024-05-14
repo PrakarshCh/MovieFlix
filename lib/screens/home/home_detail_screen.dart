@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ttn_flix/Extension/context_extention.dart';
 import 'package:ttn_flix/Screens/home/widgets/favourites_button/wishList_cubit.dart';
 import 'package:ttn_flix/Screens/home/widgets/favourites_button/wishList_state.dart';
 import 'package:ttn_flix/constants/api_constant.dart';
@@ -48,7 +49,7 @@ class MovieDetailScreen extends StatelessWidget {
                         AppIcons.favourites,
                         color: movie.isFavSelected
                             ? AppColors.backgroundColor
-                            : AppColors.lightgrey,
+                            : AppColors.white,
                       ),
                     );
                   },
@@ -72,11 +73,12 @@ class MovieDetailScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.network(
-                        "${ServerConstants.imageBaseUrl}${movie.imageUrl ?? ''}",
-                        fit: BoxFit.cover,
-                        height: 250,
-                        width: 300,
+                      SizedBox(
+                        height: context.isSmallScreen ? 200 : 400,
+                        child: Image.network(
+                          "${ServerConstants.imageBaseUrl}${movie.imageUrl ?? ''}",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       const SizedBox(
                         height: AppPaddings.regular,
@@ -89,77 +91,87 @@ class MovieDetailScreen extends StatelessWidget {
                             child: Padding(
                               padding:
                                   const EdgeInsets.all(AppIconSize.extraSmall),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(movie.title ?? '',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: AppIconSize.extraLarge,
-                                      )),
-                                  const SizedBox(
-                                    height: AppPaddings.small,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                              child: Center(
+                                child: SizedBox(
+                                  width: context.isSmallScreen
+                                      ? context.width
+                                      : context.width / 2,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(movie.mediaType!.toUpperCase(),
+                                      Text(movie.title ?? '',
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: AppIconSize.regular,
+                                            fontSize: AppIconSize.extraLarge,
                                           )),
-                                      const Text('|'),
-                                      Text(movie.language?.toUpperCase() ?? '',
-                                          style: const TextStyle(
+                                      const SizedBox(
+                                        height: AppPaddings.small,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(movie.mediaType!.toUpperCase(),
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: AppIconSize.regular,
+                                              )),
+                                          const Text('|'),
+                                          Text(
+                                              movie.language?.toUpperCase() ??
+                                                  '',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: AppIconSize.regular,
+                                              )),
+                                          const Text('|'),
+                                          Text(
+                                              (movie.adult ?? false)
+                                                  ? AppStrings.adult
+                                                  : AppStrings.UA,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: AppIconSize.regular,
+                                              )),
+                                          const Text('|'),
+                                          Text(movie.releaseDate.toString(),
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: AppIconSize.regular,
+                                              )),
+                                          const Text('|'),
+                                          Text(
+                                              '${movie.voteAverage?.roundToDouble()}/10',
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: AppIconSize.regular,
+                                              )),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: AppPaddings.small,
+                                      ),
+                                      ReadMoreText(
+                                        movie.overview ?? '',
+                                        style: const TextStyle(
+                                            fontSize: AppFontSize.regular,
+                                            color: AppColors.white),
+                                        trimLines: 3,
+                                        trimCollapsedText: AppStrings.showMore,
+                                        trimExpandedText: AppStrings.showLess,
+                                        moreStyle: const TextStyle(
+                                            fontSize: AppFontSize.regular,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: AppIconSize.regular,
-                                          )),
-                                      const Text('|'),
-                                      Text(
-                                          (movie.adult ?? false)
-                                              ? AppStrings.adult
-                                              : AppStrings.UA,
-                                          style: const TextStyle(
+                                            color: AppColors.primaryColor),
+                                        lessStyle: const TextStyle(
+                                            fontSize: AppFontSize.regular,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: AppIconSize.regular,
-                                          )),
-                                      const Text('|'),
-                                      Text(movie.releaseDate.toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: AppIconSize.regular,
-                                          )),
-                                      const Text('|'),
-                                      Text(
-                                          '${movie.voteAverage?.roundToDouble()}/10',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: AppIconSize.regular,
-                                          )),
+                                            color: AppColors.primaryColor),
+                                      ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: AppPaddings.small,
-                                  ),
-                                  ReadMoreText(
-                                    movie.overview ?? '',
-                                    style: const TextStyle(
-                                        fontSize: AppFontSize.regular,
-                                        color: AppColors.white),
-                                    trimLines: 3,
-                                    trimCollapsedText: AppStrings.showMore,
-                                    trimExpandedText: AppStrings.showLess,
-                                    moreStyle: const TextStyle(
-                                        fontSize: AppFontSize.regular,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primaryColor),
-                                    lessStyle: const TextStyle(
-                                        fontSize: AppFontSize.regular,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primaryColor),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),

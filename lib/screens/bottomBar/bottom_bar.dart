@@ -6,7 +6,7 @@ import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'package:ttn_flix/screens/account/account_screen.dart';
 import 'package:ttn_flix/screens/favourites/bloc/favourite_cubit.dart';
 import 'package:ttn_flix/screens/favourites/favourites_screen.dart';
-import 'package:ttn_flix/screens/home/bloc/home_bloc.dart';
+import 'package:ttn_flix/screens/home/bloc/cubit/home_cubit.dart';
 import 'package:ttn_flix/screens/home/home_screen.dart';
 import 'package:ttn_flix/screens/home/repository/home_repository.dart';
 
@@ -22,10 +22,9 @@ class _AppBottomBarState extends State<AppBottomBar> {
 
   final List<Widget> _widgetOptions = [
     BlocProvider(
-        create: (context) => HomeBloc(repository: HomeRepository()),
-        child: HomePage()),
+        create: (context) => HomeCubit(HomeRepository()), child: HomeScreen()),
     BlocProvider(
-        create: (context) => FavouriteCubit(), child: FavouritesPage()),
+        create: (context) => FavouriteCubit(), child: const FavoriteScreen()),
     const AccountScreen(),
   ];
 

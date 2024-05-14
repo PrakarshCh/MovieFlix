@@ -11,15 +11,10 @@ class AppLoader extends StatelessWidget {
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) async => false,
-      child: Center(
-        child: Platform.isAndroid
-            ? const CircularProgressIndicator(
-                backgroundColor: AppColors.primaryColor,
-              )
-            : const CupertinoActivityIndicator(
-                color: AppColors.primaryColor,
-              ),
-      ),
+      child: const Center(
+          child: CircularProgressIndicator(
+        backgroundColor: AppColors.primaryColor,
+      )),
     );
   }
 }

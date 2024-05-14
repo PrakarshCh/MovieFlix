@@ -1,29 +1,60 @@
-abstract class HomeBlocState {
-  const HomeBlocState();
-  List<Object> get props => [];
+import 'package:ttn_flix/data/models/movie_model.dart';
+import 'package:ttn_flix/utilities/default_equatable.dart';
+
+abstract class HomeState extends DefaultEquatable {}
+
+class HomeLoading extends HomeState {}
+
+class HomeLoaded extends HomeState {
+  final List<MovieData>? carouselList;
+  final List<MovieData>? gridList;
+  final int currentPage;
+  final int totalPages;
+  final bool isReachedEnd;
+  final int? carouselCurrentPage;
+  final List<int> favorite;
+
+  HomeLoaded(
+      this.carouselList,
+      this.gridList,
+      this.currentPage,
+      this.totalPages,
+      this.isReachedEnd,
+      this.carouselCurrentPage,
+      this.favorite);
+
+  HomeLoaded copyWith(
+      {List<MovieData>? carouselList,
+      List<MovieData>? gridList,
+      int? currentPage,
+      int? totalPages,
+      bool? isReachedEnd,
+      int? carouselCurrentPage,
+      List<int>? favorite}) {
+    return HomeLoaded(
+        carouselList ?? this.carouselList,
+        gridList ?? this.gridList,
+        currentPage ?? this.currentPage,
+        totalPages ?? this.totalPages,
+        isReachedEnd ?? this.isReachedEnd,
+        carouselCurrentPage ?? this.carouselCurrentPage,
+        favorite ?? this.favorite);
+  }
+
+  @override
+  List<Object?> get props => [
+        carouselList,
+        gridList,
+        currentPage,
+        totalPages,
+        isReachedEnd,
+        carouselCurrentPage,
+        favorite
+      ];
 }
 
-class HomeInitialState extends HomeBlocState {}
+class HomeError extends HomeState {
+  final String errorMessage;
 
-class HomeLoadingState extends HomeBlocState {}
-
-class HomeLoadMoreState extends HomeBlocState {
-  HomeLoadMoreState(this.isLoadMore);
-  bool? isLoadMore;
-}
-
-class AllWishListState extends HomeBlocState {
-  AllWishListState(this.wishListItems);
-  final List<int> wishListItems;
-}
-
-class HomeCarouselSuccessState extends HomeBlocState {
-  HomeCarouselSuccessState();
-}
-
-class HomeListSuccessState extends HomeBlocState {}
-
-class HomeError extends HomeBlocState {
-  HomeError(this.message);
-  String? message;
+  HomeError(this.errorMessage);
 }

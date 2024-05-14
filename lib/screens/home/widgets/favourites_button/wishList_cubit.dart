@@ -1,37 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ttn_flix/DI/injector.dart';
+import 'package:ttn_flix/constants/app_shared_prefrence.dart';
 import 'package:ttn_flix/constants/app_string_constant.dart';
 import 'package:ttn_flix/data/models/movie_model.dart';
-import 'package:ttn_flix/utilities/db_manager.dart';
 import 'wishList_state.dart';
 
 class WishListCubit extends Cubit<WishListState> {
   WishListCubit() : super(WishListInitState());
 
   void addRemoveWishlist(BuildContext context, MovieData movie) async {
-    var db = AppInjector.getIt<DBManager>();
+    var wishListIds = AppInjector.getIt<AppSharedPref>().getList<MovieData>(
+        AppSharedPrefEnums.favouriteList.toString(), MovieData.fromJson);
     if (!movie.isFavSelected) {
-      var result = await db.insert(movie);
-      if (result > 0) {
-        if (context.mounted) {
+      wishListIds.add(movie);
+      var result = AppInjector.getIt<AppSharedPref>().saveList(
+          AppSharedPrefEnums.favouriteList.toString(),
+          wishListIds.map((fav) => fav.toJson()).toList());
+      if (await result) {
+        if (context.mounted)
           emit(WishListSuccess(AppStrings.favouritesAdded, true));
-        }
       } else {
-        if (context.mounted) {
+        if (context.mounted)
           emit(WishListError(AppStrings.favouritesErrorMessage));
-        }
       }
     } else {
-      var result = await db.delete(movie.id ?? 0);
-      if (result > 0) {
+      wishListIds.removeWhere((element) => element.id == movie.id);
+      var result = AppInjector.getIt<AppSharedPref>()
+          .saveList(AppSharedPrefEnums.favouriteList.toString(), wishListIds);
+      if (await result) {
         if (context.mounted) {
           emit(WishListSuccess(AppStrings.favouritesDeleted, false));
         }
       } else {
-        if (context.mounted) {
+        if (context.mounted)
           emit(WishListError(AppStrings.favouritesErrorMessage));
-        }
       }
     }
   }

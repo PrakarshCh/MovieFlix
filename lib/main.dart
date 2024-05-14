@@ -8,8 +8,10 @@ import 'DI/injector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AppInjector().setup();
+  AppInjector()
+      .setup(); // Register modules like ApiManager, sharedPref, dbManager, fileManager.(Dependency Injection)
   await Firebase.initializeApp(
+    // Init firebase setup
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
@@ -20,12 +22,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appRouter = AppRouter();
+    final appRouter = AppRouter(); // Init appRouter(AutoRoute)
     return MaterialApp.router(
-      title: AppStrings.appTitle,
-      theme: ThemeManager.instance.dark,
-      darkTheme: ThemeManager.instance.dark,
-      routerConfig: appRouter.config(),
-    );
+        title: AppStrings.appTitle,
+        theme: ThemeManager.instance.dark,
+        darkTheme: ThemeManager.instance.dark,
+        routerConfig: appRouter.config(),
+        debugShowCheckedModeBanner: false);
   }
 }

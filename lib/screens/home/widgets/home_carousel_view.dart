@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:ttn_flix/Helper/image_view.dart';
+import 'package:ttn_flix/Extension/context_extention.dart';
 import 'package:ttn_flix/constants/api_constant.dart';
 import 'package:ttn_flix/constants/app_constant.dart';
 import 'package:ttn_flix/data/models/movie_model.dart';
 
 class CarouselView extends StatefulWidget {
-  final List<MovieData>? movieList;
+  final List<MovieData> movieList;
   const CarouselView(this.movieList, {super.key});
+
   @override
   State<CarouselView> createState() => _CarouselViewState();
 }
@@ -15,20 +16,20 @@ class _CarouselViewState extends State<CarouselView>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   int _currentPage = 0;
-  int totalPage = 0;
+  int _totalPage = 0;
   late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    totalPage = 10; //widget.movieList?.length ?? 0;
+    _totalPage = widget.movieList.length;
     _pageController = PageController(initialPage: 0);
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 5));
     _animationController.addListener(() {
       if (_animationController.status == AnimationStatus.completed) {
         _animationController.reset();
-        if (_currentPage < (totalPage - 1)) {
+        if (_currentPage < (_totalPage - 1)) {
           _currentPage++;
         } else {
           _currentPage = 0;
@@ -49,81 +50,67 @@ class _CarouselViewState extends State<CarouselView>
 
   Widget _indicator(bool isActive) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4.0),
-        height: AppIconSize.extraSmall,
-        width: AppIconSize.extraSmall,
+        margin: const EdgeInsets.symmetric(horizontal: AppPaddings.four),
+        height: AppPaddings.extraSmall,
+        width: AppPaddings.extraSmall,
         decoration: BoxDecoration(
-            boxShadow: [
-              isActive
-                  ? BoxShadow(
-                      color: AppColors.primaryColor.withOpacity(0.72),
-                      blurRadius: 2.0,
-                      spreadRadius: 1.0)
-                  : const BoxShadow(
-                      color: Colors.transparent,
-                    )
-            ],
             shape: BoxShape.circle,
-            color:
-                isActive ? AppColors.primaryColor : const Color(0XFFEAEAEA)));
+            color: isActive ? AppColors.primaryColor : AppColors.white));
   }
 
   Widget _buildPageIndicator() {
-    List<MovieData>? updatedmovieList = widget.movieList?.sublist(0, 10);
-
     return Positioned.fill(
-      bottom: 0,
-      child: Align(
-        alignment: FractionalOffset.bottomCenter,
-        child: Container(
-          height: 30,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.black.withAlpha(200),
-                  Colors.black.withAlpha(0)
-                ]),
-          ),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: updatedmovieList?.map((element) {
-                    return _indicator(
-                        element == updatedmovieList?[_currentPage]);
-                  }).toList() ??
-                  []),
-        ),
-      ),
-    );
+        bottom: 0,
+        child: Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: Container(
+                height: AppIconSize.xxLarge,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                      Colors.black.withAlpha(200),
+                      Colors.black.withAlpha(0)
+                    ])),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: widget.movieList.map((element) {
+                      return _indicator(
+                          element == widget.movieList[_currentPage]);
+                    }).toList()))));
   }
 
   @override
   Widget build(BuildContext context) {
     _animationController.forward();
-    return SizedBox(
-      height: MediaQuery.of(context).size.width / 2,
-      child: Stack(
-        children: [
-          PageView.builder(
-              itemCount: totalPage,
-              scrollDirection: Axis.horizontal,
-              controller: _pageController,
-              onPageChanged: (value) {
-                setState(() {
-                  _currentPage = value;
-                });
-                _animationController.forward();
-              },
-              itemBuilder: (BuildContext context, int index) {
-                return ImageView(
-                  url: ServerConstants.imageBaseUrl +
-                      (widget.movieList?[index].imageUrl ?? ''),
-                );
-              }),
-          _buildPageIndicator()
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraint) {
+        return SizedBox(
+            height: context.isSmallScreen ? 200 : 400,
+            child: Stack(children: [
+              PageView.builder(
+                  itemCount: _totalPage,
+                  scrollDirection: Axis.horizontal,
+                  controller: _pageController,
+                  onPageChanged: (value) {
+                    _currentPage = value;
+                    setState(() {});
+                    _animationController.forward();
+                  },
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                        onTap: () {},
+                        child: Image.network(
+                          ServerConstants.imageBaseUrl +
+                              widget.movieList[index].imageUrl.toString(),
+                          fit: BoxFit.contain,
+                          height: 200,
+                        ));
+                  }),
+              _buildPageIndicator()
+            ]));
+      },
     );
   }
 }

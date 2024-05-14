@@ -34,6 +34,11 @@ class MovieData {
   @JsonKey(includeFromJson: false)
   bool isFavSelected = false;
 
+  Map<String, dynamic> toJson() => _$MovieDataToJson(this);
+  String getContentRating() {
+    return adult! ? "A" : "U/A";
+  }
+
   MovieData(
       {this.imageUrl,
       this.adult,
